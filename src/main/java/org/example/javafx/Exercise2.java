@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.InputStream;
 
 public class Exercise2 extends Application {
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Check boxes");
@@ -48,17 +49,18 @@ public class Exercise2 extends Application {
             textArea.setVisible(checkBoxText.isSelected());
         });
 
-        HBox boxButton = new HBox (15, checkBoxButton, button);
+        HBox boxButton = new HBox(15, checkBoxButton, button);
         HBox boxCheckBox = new HBox(15, checkBox2, checkBox);
         HBox boxText = new HBox(15, checkBoxText, textArea);
 
-        FlowPane root = new FlowPane(Orientation.VERTICAL ,20,15,boxButton,boxCheckBox,boxText);
+        FlowPane root = new FlowPane(Orientation.VERTICAL, 20, 15, boxButton, boxCheckBox, boxText);
         root.setAlignment(Pos.CENTER);
         Scene primaryScene = new Scene(root);
         primaryStage.setScene(primaryScene);
 
         primaryStage.show();
     }
+
     public static void main(String[] args) {
         launch();
     }
