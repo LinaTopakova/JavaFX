@@ -4,14 +4,12 @@ import javafx.application.Application;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -35,7 +33,7 @@ public class Exercise3 extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Menu Вкусно и точка");
-        primaryStage.setWidth(1000);
+        primaryStage.setWidth(800);
         primaryStage.setHeight(400);
 
         InputStream icon = getClass().getResourceAsStream("/images/exercise3.png");
@@ -43,6 +41,7 @@ public class Exercise3 extends Application {
         primaryStage.getIcons().add(new Image(icon));
 
         List<Menu> menu = new ArrayList<>();
+
         Menu product;
 
         TextField cappuccino = new TextField("Капучино     -     100р");
@@ -101,8 +100,13 @@ public class Exercise3 extends Application {
         menu.add(product);
         nuggets.setMinWidth(300);
 
-        TextArea textArea = new TextArea();
-        textArea.setPrefWidth(350);
+        //Text textArea = new Text();
+        //textArea.setPrefWidth(350);
+        TextArea text = new TextArea();
+        text.setEditable(false);
+        text.setMaxWidth(300);
+        text.setMaxHeight(300);
+
 
         Spinner<Integer> quantitySpinner1 = new Spinner<>(0, 69, 0);
         HBox box2 = new HBox(10,cappuccino,quantitySpinner1);
@@ -128,15 +132,29 @@ public class Exercise3 extends Application {
         Spinner<Integer> quantitySpinner8 = new Spinner<>(0, 69, 0);
         HBox box9 = new HBox(10,nuggets,quantitySpinner8);
 
-        VBox box = new VBox(10,box2 , box3, box4, box5, box6, box7, box8, box9);
+        Button button1 = new Button ("Заказать");
+        Button button2 = new Button ("Сбросить");
+        VBox boxButton = new VBox(15, button1, button2);
+        boxButton.setAlignment(Pos.CENTER);
+
+        VBox box = new VBox(10,box2 , box3, box4, box5, box6, box7, box8, box9,boxButton);
         box.setLayoutX(150);
         box.setLayoutY(20);
 
-        HBox box1 = new HBox(100,box,textArea);
+        HBox box1 = new HBox(50,box,text);
+
         Scene primaryScene = new Scene(box1);
+
 
         primaryStage.setScene(primaryScene);
         primaryStage.show();
+    }
+
+    private List<Menu> initialization() {
+        List<Menu> menu = new ArrayList<>();
+
+
+        return menu;
     }
 
 }
