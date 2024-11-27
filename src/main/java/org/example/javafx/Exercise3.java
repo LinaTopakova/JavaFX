@@ -6,9 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -27,117 +25,66 @@ public class Exercise3 extends Application {
         Menu(String name, int price) {
             this.name = name;
             this.price = price;
-            this.count = 1;
+            this.count = 0;
         }
     }
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Menu Вкусно и точка");
         primaryStage.setWidth(800);
-        primaryStage.setHeight(400);
+        primaryStage.setHeight(450);
 
         InputStream icon = getClass().getResourceAsStream("/images/exercise3.png");
         assert icon != null;
         primaryStage.getIcons().add(new Image(icon));
 
-        List<Menu> menu = new ArrayList<>();
+        List<Menu> menu = initialization();
+        //List<Menu> order = new ArrayList<>();
+        List<TextField> textFieldList = new ArrayList<>();
 
-        Menu product;
+        GridPane gridpane = new GridPane();
+        gridpane.setHgap(10); // Расстояние в 10 пикселей между столбцами
+        gridpane.setVgap(10);
 
-        TextField cappuccino = new TextField("Капучино     -     100р");
-        cappuccino.setEditable(false);
-        cappuccino.setAlignment(Pos.CENTER);
-        product = new Menu("Капучино",100);
-        menu.add(product);
-        cappuccino.setMinWidth(300);
-
-        TextField latte = new TextField("Латте            -     100р");
-        latte.setEditable(false);
-        latte.setAlignment(Pos.CENTER);
-        product = new Menu("Латте",110);
-        menu.add(product);
-        latte.setMinWidth(300);
-
-        TextField cocaCola = new TextField("Кола              -     100р");
-        cocaCola.setEditable(false);
-        cocaCola.setAlignment(Pos.CENTER);
-        product = new Menu("Кола",90);
-        menu.add(product);
-        cocaCola.setMinWidth(300);
-
-        TextField cheeseburger = new TextField("Чизбургер     -     100р");
-        cheeseburger.setEditable(false);
-        cheeseburger.setAlignment(Pos.CENTER);
-        product = new Menu("Чизбургер",150);
-        menu.add(product);
-        cheeseburger.setMinWidth(300);
-
-        TextField grandee = new TextField("Гранд            -     100р");
-        grandee.setEditable(false);
-        grandee.setAlignment(Pos.CENTER);
-        product = new Menu("Гранд",200);
-        menu.add(product);
-        grandee.setMinWidth(300);
-
-        TextField bigHit = new TextField("Биг Хит          -     100р");
-        bigHit.setEditable(false);
-        bigHit.setAlignment(Pos.CENTER);
-        product = new Menu("Биг Хит",180);
-        menu.add(product);
-        bigHit.setMinWidth(300);
-
-        TextField frenchFries = new TextField("Картофель     -     100р");
-        frenchFries.setEditable(false);
-        frenchFries.setAlignment(Pos.CENTER);
-        product = new Menu("Картофель Фри",120);
-        menu.add(product);
-        frenchFries.setMinWidth(300);
-
-        TextField nuggets = new TextField("Наггетсы         -     100р");
-        nuggets.setEditable(false);
-        nuggets.setAlignment(Pos.CENTER);
-        product = new Menu("Наггетсы",140);
-        menu.add(product);
-        nuggets.setMinWidth(300);
-
-        //Text textArea = new Text();
-        //textArea.setPrefWidth(350);
         TextArea text = new TextArea();
         text.setEditable(false);
         text.setMaxWidth(300);
         text.setMaxHeight(300);
 
+        for (Menu product:menu){
+            TextField textProduct = new TextField(product.name + " - " + product.price);
+            textProduct.setEditable(false);
+            textProduct.setAlignment(Pos.CENTER);
+            textProduct.setMinWidth(300);
 
-        Spinner<Integer> quantitySpinner1 = new Spinner<>(0, 69, 0);
-        HBox box2 = new HBox(10,cappuccino,quantitySpinner1);
+            Button plus = new Button("+");
 
-        Spinner<Integer> quantitySpinner2 = new Spinner<>(0, 69, 0);
-        HBox box3 = new HBox(10,latte,quantitySpinner2);
+            TextField count = new TextField(String.valueOf(product.count));
+            count.setAlignment(Pos.CENTER);
+            count.setEditable(false);
+            count.setMaxSize(30, 30);
+            count.setMinSize(30,30);
+            textFieldList.add(count);
 
-        Spinner<Integer> quantitySpinner3 = new Spinner<>(0, 69, 0);
-        HBox box4 = new HBox(10,cocaCola,quantitySpinner3);
+            Button minus = new Button("-");
+            plus.setOnAction(event -> plusToOrder(product,count));
+            minus.setOnAction(event -> minusToOrder(product,count));
+            int countRow = gridpane.getRowCount();
+            gridpane.add(textProduct,0, countRow);
+            gridpane.add(plus,1, countRow);
+            gridpane.add(count,2, countRow);
+            gridpane.add(minus,3, countRow);
 
-        Spinner<Integer> quantitySpinner4 = new Spinner<>(0, 69, 0);
-        HBox box5 = new HBox(10,cheeseburger,quantitySpinner4);
+        }
 
-        Spinner<Integer> quantitySpinner5 = new Spinner<>(0, 69, 0);
-        HBox box6 = new HBox(10,grandee,quantitySpinner5);
-
-        Spinner<Integer> quantitySpinner6 = new Spinner<>(0, 69, 0);
-        HBox box7 = new HBox(10,bigHit,quantitySpinner6);
-
-        Spinner<Integer> quantitySpinner7 = new Spinner<>(0, 69, 0);
-        HBox box8 = new HBox(10,frenchFries,quantitySpinner7);
-
-        Spinner<Integer> quantitySpinner8 = new Spinner<>(0, 69, 0);
-        HBox box9 = new HBox(10,nuggets,quantitySpinner8);
-
-        Button button1 = new Button ("Заказать");
-        Button button2 = new Button ("Сбросить");
-        VBox boxButton = new VBox(15, button1, button2);
+        Button order = new Button ("Заказать");
+        Button reset = new Button ("Сбросить");
+        order.setOnAction(event -> order(menu, text, order));
+        reset.setOnAction(even -> reset(menu, text, order,textFieldList));
+        HBox boxButton = new HBox(30, order, reset);
         boxButton.setAlignment(Pos.CENTER);
 
-        VBox box = new VBox(10,box2 , box3, box4, box5, box6, box7, box8, box9,boxButton);
+        VBox box = new VBox(10,gridpane,boxButton);
         box.setLayoutX(150);
         box.setLayoutY(20);
 
@@ -152,9 +99,75 @@ public class Exercise3 extends Application {
 
     private List<Menu> initialization() {
         List<Menu> menu = new ArrayList<>();
+        Menu product;
 
+        product = new Menu("Капучино",100);
+        menu.add(product);
+
+        product = new Menu("Латте",110);
+        menu.add(product);
+
+        product = new Menu("Кола",90);
+        menu.add(product);
+
+        product = new Menu("Чизбургер",150);
+        menu.add(product);
+
+        product = new Menu("Гранд",200);
+        menu.add(product);
+
+        product = new Menu("Биг Хит",180);
+        menu.add(product);
+
+        product = new Menu("Картофель Фри",120);
+        menu.add(product);
+
+        product = new Menu("Наггетсы",140);
+        menu.add(product);
 
         return menu;
     }
 
+    void plusToOrder(Menu product,TextField count){
+        if(product.count < 99){
+            product.count++;
+            count.setText(String.valueOf(product.count));
+        }
+        //System.out.println(product.count);
+    }
+
+    void minusToOrder(Menu product,TextField count){
+        if(product.count > 0){
+            product.count--;
+            count.setText(String.valueOf(product.count));
+        }
+    }
+
+    void order(List<Menu> menu, TextArea text, Button button){
+        text.setWrapText(true);
+        int sum = 0;
+        for(Menu product : menu){
+            if(product.count!=0){
+                String newText = String.valueOf(product.count) + "X " + product.name + "    " + String.valueOf(product.price * product.count);
+                text.appendText(newText + "\n");
+                sum += product.count* product.price;
+            }
+
+        }
+
+        text.appendText("Итого:  "+ String.valueOf(sum));
+        button.setDisable(true);
+    }
+
+    void reset(List<Menu> menu, TextArea text, Button button, List<TextField> textFields){
+        for(Menu product: menu){
+            product.count = 0;
+        }
+        for(TextField textField: textFields){
+            textField.setText("0");
+        }
+        text.clear();
+        button.setDisable(false);
+
+    }
 }
