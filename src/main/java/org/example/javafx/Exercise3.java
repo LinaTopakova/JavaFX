@@ -69,7 +69,9 @@ public class Exercise3 extends Application {
             Button minus = new Button("-");
             plus.setOnAction(event -> plusToOrder(product,count));
             minus.setOnAction(event -> minusToOrder(product,count));
+
             int countRow = gridpane.getRowCount();
+
             gridpane.add(textProduct,0, countRow);
             gridpane.add(plus,1, countRow);
             gridpane.add(count,2, countRow);
@@ -169,5 +171,9 @@ public class Exercise3 extends Application {
         text.clear();
         button.setDisable(false);
 
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
